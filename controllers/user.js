@@ -14,7 +14,7 @@ const login = async (req, res) => {
     if (!isPasswordCorrect) {
       return validationError(res, 'Invalid credentials');
     }
-    const token = jwt.sign({ email: userExists.email, id: userExists._id }, 'test');
+    const token = jwt.sign({ email: userExists.email, id: userExists._id }, process.env.JWT_SECRET);
     userExists.password =undefined;
 
     return successResponse(res, 'User logged in successfully', { result: userExists, token });
@@ -37,7 +37,7 @@ const register = async (req, res) => {
       email,
       password: hashedPassword,
     });
-    const token = jwt.sign({ email: result.email, id: result._id }, 'test');
+    const token = jwt.sign({ email: result.email, id: result._id }, process.env.JWT_SECRET);
     result.password =undefined;
     return successResponse(res, 'User created successfully', { result, token });
   } catch (err) {
@@ -47,7 +47,7 @@ const register = async (req, res) => {
 
 const getUser = async (req, res) => {
   try {
-    const secret = process.env.JWT_SECRET || 'test';
+    const secret = process.env.JWT_SECRET ;
     let token = req.headers.authorization?.split(' ')[1] || '';
 
     let decoded = jwt.verify(token, secret);
