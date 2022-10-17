@@ -56,7 +56,8 @@ const getUser = async (req, res) => {
       return notFoundResponse(res, 'User does not exist');
     }
     user.password =undefined
-    return successResponse(res, 'User fetched successfully', { result: user });
+    const users = await User.find()
+    return successResponse(res, 'User fetched successfully', { result: users });
   } catch (err) {
     return errorResponse(res, err.message);
   }
